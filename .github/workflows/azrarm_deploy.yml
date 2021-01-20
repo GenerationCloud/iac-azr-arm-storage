@@ -1,1 +1,42 @@
+name: Azure storage account deployment with ARM template
 
+on:
+  push:
+    branches: 
+      - main
+    paths-ignore:
+      - '.github/**'
+
+env:
+  AZURE_RG: RG-GH-STO-DEV
+  AZURE_LOCATION: westeurope
+  
+jobs:
+  deploy:
+    name: Deploy ARM template to Azure
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Git Repo
+        uses: actions/checkout@v2
+      
+      - name: Login Azure
+        uses: azure/login@v1.1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          
+      - name: Deploy ARM Template
+        id: deployarm
+        uses: azure/arm-deploy@v1
+        with:
+          scope: resourcegroup
+          subscriptionId: ${{ secrets.AZURE_SUBID}}
+          template: ./ARM/azstorage_template.json
+          parameters: ./ARM/azstorage_parameters.json
+          deploymentName: GHADeploy-01
+          deploymentMode: Incremental
+          
+      - name: Display storage account name
+        run: echo $${{ steps.deployarm.outputs.storageAccountName }} 
+          
+           
