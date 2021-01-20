@@ -30,7 +30,7 @@ jobs:
         with:
           azcliversion: 2.0.72
           inlineScript: |
-            az group create --name $${{ env.AZURE_RG }} --location ${{ env.AZURE_LOCATION }}
+            az group create --name $${{ env.AZURE_RG }} --location ${{ env.AZURE_LOCATION }} --subscription ${{ secrets.AZURE_SUBID }}
           
       - name: Deploy ARM Template
         id: deployarm
