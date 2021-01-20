@@ -30,7 +30,8 @@ jobs:
         uses: azure/arm-deploy@v1
         with:
           scope: resourcegroup
-          subscriptionId: ${{ secrets.AZURE_SUBID}}
+          subscriptionId: ${{ secrets.AZURE_SUBID }}
+          resourceGroupName: ${{ env.AZURE_RG }}
           template: ./ARM/azstorage_template.json
           parameters: ./ARM/azstorage_parameters.json
           deploymentName: GHADeploy-01
